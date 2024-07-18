@@ -9,7 +9,7 @@ class GenericController<T> {
     private router: Router;
 
     public model?: Model<T>;
-    
+
     public methods: HttpMethods[] = [
         'DELETE',
         'GET',
@@ -27,11 +27,13 @@ class GenericController<T> {
     }
 
     private initializeRoutes() {
-        if(this.model){
+        if (this.model) {
             if (this.methods.includes('POST'))
                 this.router.post('/', this.create);
             if (this.methods.includes('GET'))
                 this.router.get('/', this.readAll);
+            if (this.methods.includes('GET'))
+                this.router.get('/paginate/', this.readByPagination);
             if (this.methods.includes('GET'))
                 this.router.get('/:id', this.readOne);
             if (this.methods.includes('PUT'))
@@ -59,6 +61,42 @@ class GenericController<T> {
         try {
             const items = await this.model.find();
             res.status(200).json(items);
+        } catch (err) {
+            res.status(400).json({ error: err });
+        }
+    };
+
+    private readByPagination = async (req: Request, res: Response): Promise<void> => {
+        const { page = 1, page_size = 10 } = req.query
+
+
+        if (!this.model)
+            return;
+        try {
+
+            let index = 0;
+            let pageSize = 10;
+            if (typeof page_size === 'number' || typeof page_size === 'string')
+                try {
+                    pageSize = parseInt(page_size.toString(),10);
+                } catch { }
+            if (typeof page === 'number' || typeof page === 'string')
+                try {
+                    const p = parseInt(page.toString(),10);
+                    index = p > 0 ? p - 1 : 0;
+                } catch { }
+                
+
+            const items = await this.model.find().skip(index * pageSize).limit(pageSize);
+            const nextItemsCount = await this.model.find().skip((index+1) * pageSize).limit(pageSize).countDocuments();
+            res.status(200).json({
+                page:items.length ? index + 1 : 1,
+                pageSize,
+                next:nextItemsCount>0? (index + 1) : null,
+                prev:index>0? index : null,
+                total_count: await this.model.countDocuments(),
+                results:items
+            });
         } catch (err) {
             res.status(400).json({ error: err });
         }
