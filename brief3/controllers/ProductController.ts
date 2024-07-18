@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import Product, { IProduct } from '../models/Product';
 import GenericController, { HttpMethods } from '../utils/an_mern_pack/GenericController';
-import { TheRequest } from '../utils/an_mern_pack/types';
 
 class ProductController extends GenericController<IProduct> {
   public model = Product
@@ -11,11 +10,7 @@ class ProductController extends GenericController<IProduct> {
     'PUT',
     'DELETE',
   ]
-  public async create(req: TheRequest, res: Response){
-    const response = super.create(req, res);
-    
-    return response
-  }
+
 
 }
 

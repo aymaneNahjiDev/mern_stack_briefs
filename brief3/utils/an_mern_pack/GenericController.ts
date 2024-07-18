@@ -1,8 +1,8 @@
 // src/controllers/GenericController.ts
+import * as joi from 'joi';
+import type { TheRequest } from './types';
 import { Router, Response, NextFunction } from 'express';
 import { Model, Document, IfAny, Require_id } from 'mongoose';
-import * as joi from 'joi';
-import { TheRequest } from './types';
 
 
 export type HttpMethods = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE'
@@ -209,7 +209,7 @@ class GenericController<T> {
         }
     }
 
-    public async create(req: TheRequest, res: Response){
+    public create = async (req: TheRequest, res: Response) =>{
         if (!this.model)
             return;
         try {
@@ -233,7 +233,7 @@ class GenericController<T> {
         }
     };
 
-    public async readByPagination(req: TheRequest, res: Response){
+    public readByPagination = async(req: TheRequest, res: Response) => {
         const { page = 1, page_size = 10 } = req.query
 
 
@@ -269,7 +269,7 @@ class GenericController<T> {
         }
     };
 
-    public async readOne(req: TheRequest, res: Response){
+    public readOne = async(req: TheRequest, res: Response)=>{
         if (!this.model)
             return;
         try {
@@ -285,7 +285,7 @@ class GenericController<T> {
         }
     };
 
-    public async update(req: TheRequest, res: Response){
+    public update = async(req: TheRequest, res: Response)=>{
         if (!this.model)
             return;
         try {
@@ -301,7 +301,7 @@ class GenericController<T> {
         }
     };
 
-    public async deleteItem(req: TheRequest, res: Response) {
+    public deleteItem = async(req: TheRequest, res: Response) => {
         if (!this.model)
             return;
         try {

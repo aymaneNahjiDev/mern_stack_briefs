@@ -181,7 +181,7 @@ class HttpController {
 
         return res.status(200).send();
     };
-    public async onDelete (req: TheRequest, res: Response) {
+    public async onDelete(req: TheRequest, res: Response) {
 
         return res.status(204).send();
     };

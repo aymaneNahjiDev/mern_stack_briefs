@@ -1,5 +1,7 @@
+import { Response } from 'express';
 import Order, { IOrder } from '../models/Order';
-import GenericController, { HttpMethods, HttpQueryValidations, Middlewares } from '../utils/an_mern_pack/GenericController';
+import GenericController, { HttpMethods } from '../utils/an_mern_pack/GenericController';
+import { TheRequest } from '../utils/an_mern_pack/types';
 
 
 class OrderController extends GenericController<IOrder> {
@@ -8,6 +10,8 @@ class OrderController extends GenericController<IOrder> {
     'GET',
     // 'POST',
   ]
+
+  
   
 }
 
